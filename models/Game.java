@@ -9,6 +9,10 @@ public class Game{
 	private Integer winCounter; 
 		//keeps tracks of how many consecutive wins there have been by the same player
 		//modifies scoring once we have implemented that functionality
+	private Integer kanCounter;
+		//keeps track of kans called during a round
+		//if this ever exceeds 4, or reaches 4 with multiple players calling at least one kan,
+		//the round ends
 	private Integer currentRound;
 		//keeps track of current round. To start, we will most likely
 	private Integer currentHand;
@@ -30,6 +34,7 @@ public class Game{
 		this.roundWind = "East";
 		this.prevWinner = -1; 
 		this.winCounter = 0;
+		this.kanCounter = 0;
 		this.currentRound = 1;
 		this.currentHand = 1;
 		this.currentPlayer = 1;
@@ -86,6 +91,12 @@ public class Game{
 	public void setWinCounter(Integer winCounter){
 		this.winCounter = winCounter;
 	}
+	public Integer getKanCounter(){
+		return kanCounter;
+	}
+	public void setKanCounter(Integer kanCounter){
+		this.kanCounter = kanCounter;
+	}
 
 	public List<Integer> getPlayers(){
 		return players;
@@ -109,15 +120,158 @@ public class Game{
 		//will primarily be used to score/validate hands
 	//private Tileset tileset;
 		//tileset will need to be divided into several groups
-		//tiles in active wall
-		//tiles in dead wall
-			//dead wall will have the 10 dora/uradora and a set of 4 tiles
-			//these 4 tiles can be drawn when a user calls a Kan
-		//tiles in hands
-		//tiles in discards
+
+	//private List<Tile> wall;
+	//private List<Tile> deadWall; //contains the 10 potential dora/ura dora and 4 tiles that can be drawn from Kans
+		//tiles in hands // stored in Player classes
+		//tiles in discards // stored in Player classes
 
 	//other getters/setters
 	/*public Long getId(){
 		return id;
 	}*/
+
+
+
+
+	//non-getter/setter functions
+
+	/*public List<Player> checkPlayerWaits(Tile tile){
+		List <Player> claims = new ArrayList<>();
+		for(Player player : players){
+			if(player == this.activePlayer){
+				continue;
+			}
+			else if (player.checkIfTileInWait(tile)){
+				claims.add(player);
+			}
+		}
+		return claims;
+	}
+
+
+	public void startGame(){
+		setupGame();
+		draw(currentPlayer);
+		playerTurn(currentPlayer);
+	}
+	public void setupGame(){
+		this.wall = tileset.getTiles();
+		Collections.shuffle(this.wall);
+		breakWall();
+		dealHands();
+	}
+	public void dealHands(){
+		for (Player player : players){ // deal 13 tiles to each player
+			for (int i = 0; i < 13; i++){
+				draw(player);
+			}
+		}
+	}
+
+	public void breakWall(){
+		for (int i = 0; i < 14; i++){ //deal 14 tiles to the dead wall
+			this.deadWall.add(this.wall.get(this.wall.size()-1));
+			this.wall.remove(this.wall.size()-1);
+		}
+	}
+
+	public static boolean isValidWinningHand(Hand hand){
+		if (hand.getTiles().size() >= 14){ 
+			//the size of the list of all tiles in hand must be at least 14 or the hand cannot possibly be a winning hand
+			Hand test = hand;
+		}
+		return false;
+	}
+
+	public void draw(Player player){
+		player.drawTile(this.wall.get(this.wall.size()-1));
+		this.wall.remove(this.wall.size()-1);
+	}
+	public void drawFromDeadWall(Player player){
+		player.drawTile(this.deadWall.get(10)); //draw the 11th tile from the dead wall (the first 10 are dora/ura dora)
+		this.deadWall.remove(this.deadWall.get(10));
+	}
+	public void playerTurn(Player player){
+		//TODO: check for player to declare Tsumo or a concealed Kan
+		//TODO: create "actionsAvailable" variable to check if player can declare kan or tsumo
+		//while(actionsAvailable){ 
+			//do stuff
+			if (playerDeclaresTsumo){
+				actionsAvailable = false;
+				endHand(player);
+			}
+			else if (playerDeclaresKan){
+				this.setKanCounter(this.getKanCounter+1);
+				if (this.getKanCounter() > 4){
+					actionsAvailable = false;
+					endHand(player);
+				}
+				else{
+					drawFromDeadWall(player);
+				}
+			}
+			else{
+				actionsAvailable = false;
+			}
+		}
+		if(player.getHand().isWinner()){ //end the game (and break this loop)
+			endHand(Player player);
+		}
+		else{
+		//TODO: check for player to discard, set variable "discardedTile" to be that discard
+			List<Player> claims = checkPlayerWaits(discardedTile)
+			if (claims.size() != null){
+				//TODO: check if players claim tile
+				if (tile claimed){
+					this.setCurrentPlayer(claimingPlayer);
+				}
+				else{
+					this.setCurrentPlayer(nextPlayer);
+					draw(this.currentPlayer);
+				}
+			}
+			else{
+				this.setCurrentPlayer(nextPlayer);
+				draw(this.currentPlayer);
+			}
+			playerTurn(this.currentPlayer);
+		}
+	}
+	public List<List<Tile>> handPermutations(List<Tile> tiles){
+		if (tiles.size() < 2){
+			return tiles;
+		}
+
+		List<List<Tile>> permutations = new ArrayList<ArrayList<Tile>>();
+
+		for (var i = 0; i < tiles.size(); i++){
+			Tile tile = tiles.get(i);
+
+			if (tiles.indexOf(tile) != i){
+				continue;
+			}
+		
+
+			List<Tile> remaining = new ArrayList<Tile>;
+			for (var j = 0; j < tiles.size(); j++){
+				if (j.equals(i)){
+					continue;
+				}
+				else{
+					remaining.add(tiles.get(j));
+				}
+			}
+
+
+			for (List<Tile> handPermutation of handPermutations(remaining)){
+				List<Tile> newPerm = newArrayList<Tile>();
+				newPerm.add(tile);
+				newPerm.addAll(handPermutation);
+				permutations.push(newPerm);
+			}
+		}
+		return permutations;
+	}
+	*/
 }
