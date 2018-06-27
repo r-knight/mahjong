@@ -1,8 +1,6 @@
-
-
 import java.util.List;
-//import com.sjcdojo.mahjong.Player; // Temp
-//import com.sjcdojo.mahjong.Tile; // Temp
+import com.sjcdojo.mahjong.Player; // Temp
+import com.sjcdojo.mahjong.Tile; // Temp
 
 public class Hand {
     private List<Tile> tiles;
@@ -10,6 +8,17 @@ public class Hand {
     private List<Meld> melds;
     private List<Tile> waitTiles;
 
+    public Hand() {
+    }
+
+    public Hand(List<Tile> tiles, Player player) {
+        this.tiles = tiles;
+        this.player = player;
+    }
+
+    public Hand(Player player) {
+        this.player = player;
+    }
     // Draws one tile from the deck and adds to the Hand
     public void drawTile(Tile drewTile) {
         tiles.add(drewTile);
@@ -22,10 +31,9 @@ public class Hand {
     }
 
     // Discards a tile from Hand and returns it to the caller
-    public Tile discard(Tile discardedTile) {
+    public Tile discard() {
         // TODO: Find the candidate tile to discard.
         refreshTilesInWait();
-        return discardedTile;
     }
 
     // Checks tiles in the Hand and updates waitTiles list
@@ -54,7 +62,36 @@ public class Hand {
         return result;
     }
 
-    public void setTiles(List<Tile> tiles){
+    // getters and setters
+    public List<Tile> getTitles() {
+        return tiles;
+    }
+
+    public void setTiles(List<Tile> tiles) {
         this.tiles = tiles;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public List<Meld> getMelds() {
+        return melds;
+    }
+
+    public void setMelds(List<Meld> melds) {
+        this.melds = melds;
+    }
+
+    public List<Tile> getWaitTitles() {
+        return waitTiles;
+    }
+
+    public void setWaitTiles(List<Tile> waitTiles) {
+        this.waitTiles = waitTiles;
     }
 }
