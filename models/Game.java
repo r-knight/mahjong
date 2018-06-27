@@ -1,5 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
+
 public class Game{
 
 	private String roundWind;
@@ -31,7 +33,7 @@ public class Game{
 	}
 
 	public Game(List<Integer> players, Integer rounds){
-		this.roundWind = "East";
+		this.roundWind = "east";
 		this.prevWinner = -1; 
 		this.winCounter = 0;
 		this.kanCounter = 0;
@@ -153,13 +155,26 @@ public class Game{
 	public void startGame(){
 		setupGame();
 		draw(currentPlayer);
-		playerTurn(currentPlayer);
+		playerTurn(currentPlayer); //player turn functions as a game loop
 	}
 	public void setupGame(){
 		this.wall = tileset.getTiles();
 		Collections.shuffle(this.wall);
+		Collections.shuffle(this.players);
+		assignWindsAndSeats();
 		breakWall();
 		dealHands();
+	}
+
+
+	public void assignWindsAndSeats(){
+		String[] windsArr = {"east", "south", "west", "north"};
+		List<String> winds = new ArrayList<String>(Arrays.asList(windsArr));
+		for (int i = 0; i < 4; i++){
+			players.get(i).setWind(wins.get(i));
+		}
+		this.setCurrentPlayer(players.get(0));
+		this.setCurrentDealer(players.get(0));
 	}
 	public void dealHands(){
 		for (Player player : players){ // deal 13 tiles to each player
@@ -192,7 +207,8 @@ public class Game{
 		player.drawTile(this.deadWall.get(10)); //draw the 11th tile from the dead wall (the first 10 are dora/ura dora)
 		this.deadWall.remove(this.deadWall.get(10));
 	}
-	public void playerTurn(Player player){
+
+	public void playerActionsPhase(Player player){
 		//TODO: check for player to declare Tsumo or a concealed Kan
 		//TODO: create "actionsAvailable" variable to check if player can declare kan or tsumo
 		//while(actionsAvailable){ 
@@ -215,28 +231,74 @@ public class Game{
 				actionsAvailable = false;
 			}
 		}
+	}
+	public Tile playerTileDiscardPhase(Player player){
+		Tile discardedTile;
+		if (player.isHuman()){
+			//TODO: check for player to discard, set variable "discardedTile" to be that discard
+			discardedTile = player.discard();
+		}
+		else{
+			discardedTile = player.discard();
+		}
+	}
+
+	public boolean discardClaimPhase(Player player, Tile discardedTile){
+		List<Player> claims = checkPlayerWaits(discardedTile)
+		boolean tileClaimed = false;
+		if (claims.size() != null){
+			//TODO: check if players claim tile, set tileClaimed to true if claimed
+			if (tileClaimed){
+				this.setCurrentPlayer(claimingPlayer);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void setNextPlayer(){
+		String currentPlayerWind = this.currentPlayer.getWind();
+		Player nextPlayer;
+		switch(currentPlayerWind){
+			case "east":
+				nextPlayer = players.get(1);
+				break;
+			case "south":
+				nextPlayer = players.get(2);
+				break;
+			case "west":
+				nextPlayer = players.get(3);
+				break;
+			case "north":
+				nextPlayer = players.get(0);
+				break;
+			default:
+				//should not occur
+				System.out.printLn("Invalid Player Wind Attribute:");
+				System.out.printLn(currentPlayerWind);
+				break;
+		}
+		this.setCurrentPlayer(nextPlayer);
+	}
+	public void playerTurn(Player player){
+		playerActionsPhase(player);
 		if(player.getHand().isWinner()){ //end the game (and break this loop)
 			endHand(Player player);
 		}
 		else{
-		//TODO: check for player to discard, set variable "discardedTile" to be that discard
-			List<Player> claims = checkPlayerWaits(discardedTile)
-			if (claims.size() != null){
-				//TODO: check if players claim tile
-				if (tile claimed){
-					this.setCurrentPlayer(claimingPlayer);
-				}
-				else{
-					this.setCurrentPlayer(nextPlayer);
-					draw(this.currentPlayer);
-				}
+			Tile discardedTile = playerTileDiscardPhase(player);
+			boolean tileClaimed = discardClaimPhase(player, discardedTile)
+			if(!(tileClaimed)){ // if the discarded tile is not claimed, switch to next player
+				setNextPlayer(); // sets the game's current player to the next player
+				draw(this.currentPlayer); // player needs to draw if they did not claim a discarded tile
 			}
-			else{
-				this.setCurrentPlayer(nextPlayer);
-				draw(this.currentPlayer);
-			}
-			playerTurn(this.currentPlayer);
+			playerTurn(this.currentPlayer); //start the process again with the new player
 		}
+	}
+
+	public void endHand(Player player){
+		System.out.printLn("game has ended. Winner:");
+		System.out.printLn(player);	
 	}
 	public List<List<Tile>> handPermutations(List<Tile> tiles){
 		if (tiles.size() < 2){
