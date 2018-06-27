@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
-
-
+//@Entity
+//@Table(name = "players")
 public class Player{
 
 //	need to import User, Game, Hand when they are compiled
@@ -16,7 +16,16 @@ public class Player{
 		private ArrayList<Tile> discards;
 		private boolean isActive; //used for the game logic to track when a player is done with their turn. the game logic should alter the state of the player before they can perform actions
 		private boolean isHuman; //tracks the players vs AIs
-		private Long userId; //connection to the logged in user
+		
+//		one to one relationship with the user
+		
+//		@OneToOne(mappedBy="player", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+		private User user;
+		
+		
+//		one to one relationship with the hand
+//		@OneToOne(mappedBy="player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+		private Hand hand;
 		
 		
 		public Player(){
@@ -39,7 +48,8 @@ public class Player{
 		
 //		draw function -> calls on external draw and adds to current hand
 		public void draw() {
-			hand.drawTile();
+			Tile tile = gameInstance.getWall().get(gameInstance.getWall().size()-1);
+			hand.drawTile(tile);
 		}
 		
 //		discard function -> calls on game tile movement, but logs the tile in discards list
@@ -50,7 +60,7 @@ public class Player{
 //		claim function -> 
 		public void claim(Tile tile) {
 //			call external methods to claim tiles
-			hand.claimTile();
+			hand.claimTile(tile);
 		}
 		
 //		pass function ->
@@ -58,14 +68,14 @@ public class Player{
 		
 //		declare function ->
 		public List<Tile> declare(){
-			List<Tile> tempList = new List<Tile>();
+			List<Tile> tempList = new ArrayList<Tile>();
 			return tempList;
 		}
 		
 		
 //		tsumo function-> calls on validate hand 
 		public boolean tsumo() {
-			this.hand.validate();
+			return this.hand.isWinner();
 		}
 		
 //		endTurn function -> sets active state
@@ -145,13 +155,6 @@ public class Player{
 		public void setHuman(boolean isHuman) {
 			this.isHuman = isHuman;
 		}
-		public Long getUserId() {
-			return userId;
-		}
-		public void setUserId(Long userId) {
-			this.userId = userId;
-		}
-		
 		
 		
 		

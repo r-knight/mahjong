@@ -5,7 +5,7 @@ public class TileSet {
 	private ArrayList<Tile> allTiles;
 	
 	public TileSet(){
-	this.allTiles = buildDeck();	
+		this.allTiles = buildDeck();	
 	}
 	
 	private final ArrayList<Tile> buildDeck() {
@@ -18,6 +18,8 @@ public class TileSet {
 				Tile temp = new Wind(winds[i]);
 				temp.setName(winds[i]);
 				temp.setSuite("wind");
+				temp.setSelected(false);
+				temp.setLocation(0);
 				deck.add(temp);
 			}
 			
@@ -30,6 +32,8 @@ public class TileSet {
 				Tile temp = new Dragon(dragons[i]);
 				temp.setName(dragons[i]);
 				temp.setSuite("dragon");
+				temp.setSelected(false);
+				temp.setLocation(0);
 				deck.add(temp);
 			}
 			
@@ -41,6 +45,8 @@ public class TileSet {
 				Tile temp = new Pin(i);
 				temp.setName(Integer.toString(i));
 				temp.setSuite("pin");
+				temp.setSelected(false);
+				temp.setLocation(0);
 				deck.add(temp);
 			}
 		}
@@ -51,6 +57,8 @@ public class TileSet {
 				Tile temp = new Bamboo(i);
 				temp.setName(Integer.toString(i));
 				temp.setSuite("bamboo");
+				temp.setSelected(false);
+				temp.setLocation(0);
 				deck.add(temp);
 			}
 		}
@@ -61,6 +69,8 @@ public class TileSet {
 				Tile temp = new Character(i);
 				temp.setName(Integer.toString(i));
 				temp.setSuite("character");
+				temp.setSelected(false);
+				temp.setLocation(0);
 				deck.add(temp);
 			}
 		}
