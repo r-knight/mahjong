@@ -153,6 +153,8 @@ public class Game{
 
 
 	public void startGame(){
+		Collections.shuffle(this.players);
+		assignWindsAndSeats();
 		setupGame();
 		draw(currentPlayer);
 		playerTurn(currentPlayer); //player turn functions as a game loop
@@ -160,12 +162,9 @@ public class Game{
 	public void setupGame(){
 		this.wall = tileset.getTiles();
 		Collections.shuffle(this.wall);
-		Collections.shuffle(this.players);
-		assignWindsAndSeats();
 		breakWall();
 		dealHands();
 	}
-
 
 	public void assignWindsAndSeats(){
 		String[] windsArr = {"east", "south", "west", "north"};
@@ -175,6 +174,32 @@ public class Game{
 		}
 		this.setCurrentPlayer(players.get(0));
 		this.setCurrentDealer(players.get(0));
+	}
+	public void rotateWinds(){
+		for (int i = 0; i < 4; i++){
+			Player player = players.get(i);
+			playerWind = player.getWind();
+			switch(playerWind){ // wind rotation is set, so a switch case can handle this in a straightforward way
+				case "east":
+					player.setWind("north");
+					break;
+				case "south":
+					player.setWind("east");
+					this.setCurrentPlayer(player);	//East wind will be the dealer (and current player)
+					this.setCurrentDealer(player);
+					break;
+				case "west":
+					player.setWind("south");
+					break;
+				case "north":
+					player.setWind("west");
+					break;
+				default:
+					//should not occur
+					System.out.printLn("Invalid Player Wind Attribute:");
+					System.out.printLn(playerWind);
+					break;
+		}
 	}
 	public void dealHands(){
 		for (Player player : players){ // deal 13 tiles to each player
@@ -279,6 +304,7 @@ public class Game{
 				break;
 		}
 		this.setCurrentPlayer(nextPlayer);
+		this.rotateWinds();
 	}
 	public void playerTurn(Player player){
 		playerActionsPhase(player);
@@ -292,13 +318,74 @@ public class Game{
 				setNextPlayer(); // sets the game's current player to the next player
 				draw(this.currentPlayer); // player needs to draw if they did not claim a discarded tile
 			}
+			this.setCurrentDealer(this.currentPlayer);
 			playerTurn(this.currentPlayer); //start the process again with the new player
 		}
 	}
 
 	public void endHand(Player player){
 		System.out.printLn("game has ended. Winner:");
-		System.out.printLn(player);	
+		System.out.printLn(player);
+		if(this.prevWinner != null && this.prevWinner.equals(player)){
+			this.winCount +=1;
+		}
+		else{
+			this.prevWinner = player;
+			this.winCounter = 1;
+		}
+		//TODO: expand on functionality to account for player winning while dealer
+		if (currentHand %4 == 0){
+			if (currentRound.equals(rounds){
+				endGame();
+			}
+			else{
+				progressToNextRound();
+			}
+		else{
+			progressToNextHand(); 
+		}
+	}
+
+	public void endGame(){
+		System.out.printLn("Game has concluded");
+	}
+	public void updateRoundWind(){
+		roundWind = this.roundWind
+		switch(roundWind){ // wind rotation is set, so a switch case can handle this in a straightforward way
+			case "east":
+				this.setRoundWind("north");
+				break;
+			case "south":
+				this.setRoundWind("east");
+				break;
+			case "west":
+				this.setRoundWind("south");
+				break;
+			case "north":
+				this.setRoundWind("west");
+				break;
+			default:
+				//should not occur
+				System.out.printLn("Invalid Round Wind Attribute:");
+				System.out.printLn(round);
+				break;
+	}
+	public void updateGameAttributes(){
+		//TODO: check if other attributes should be updated here
+		this.kanCounter = 0; 
+		this.currentHand +=1;
+	}
+	public void progressToNextRound(){
+		this.currentRound +=1;
+		updateRoundWind();
+		progressToNextHand();
+	}
+	public void progressToNextHand(){
+		rotateWinds();
+		updateGameAttributes();
+		setupGame();
+		draw(currentPlayer);
+		playerTurn(currentPlayer);
 	}
 	public List<List<Tile>> handPermutations(List<Tile> tiles){
 		if (tiles.size() < 2){
