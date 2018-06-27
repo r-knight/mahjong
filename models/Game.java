@@ -1,12 +1,13 @@
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Game{
 
 	private String roundWind;
 		//String representing the current wind. This can be derived from  the currentRound
-	private Integer prevWinner;
+	private Player prevWinner;
 		//tracks previous winner. When the Player class is finished, we can change this to be of type player
 	private Integer winCounter; 
 		//keeps tracks of how many consecutive wins there have been by the same player
@@ -19,12 +20,12 @@ public class Game{
 		//keeps track of current round. To start, we will most likely
 	private Integer currentHand;
 		//keeps track of current hand. This will change each time a round ends and the current dealer did NOT win the hand
-	private Integer currentPlayer;
+	private Player currentPlayer;
 		//tracks current player. When the Player class is finished, we can change this to be of type player
-	private Integer currentDealer;
+	private Player currentDealer;
 		//tracks current dealer. When the Player class is finished, we can change this to be of type player
 		//this will initially be the east player
-	private List<Integer> players;
+	private List<Player> players;
 		//list of players. When the Player class is finished, we can change this to be of type List<Player>
 	private Integer rounds;
 		//rounds to play
@@ -32,17 +33,18 @@ public class Game{
 
 	}
 
-	public Game(List<Integer> players, Integer rounds){
+	public Game(List<Player> players, Integer rounds){
 		this.roundWind = "east";
-		this.prevWinner = -1; 
+		this.prevWinner = null;
+		this.tileSet = new TileSet();
 		this.winCounter = 0;
 		this.kanCounter = 0;
 		this.currentRound = 1;
 		this.currentHand = 1;
-		this.currentPlayer = 1;
-		this.currentDealer = 1;
 		this.rounds = rounds;
 		this.players = players;
+		this.currentPlayer = players.get(0);
+		this.currentDealer = players.get(0);
 	}
 
 	public String getRoundWind(){
@@ -52,10 +54,10 @@ public class Game{
 		this.roundWind = roundWind;
 	}
 
-	public Integer getPrevWinner(){
+	public Player getPrevWinner(){
 		return prevWinner;
 	}
-	public void setPrevWinner(Integer prevWinner){
+	public void setPrevWinner(Player prevWinner){
 		this.prevWinner = prevWinner;
 	}
 
@@ -66,17 +68,17 @@ public class Game{
 		this.currentRound = currentRound;
 	}
 
-	public Integer getCurrentPlayer(){
+	public Player getCurrentPlayer(){
 		return currentPlayer;
 	}
-	public void setCurrentPlayer(Integer currentPlayer){
+	public void setCurrentPlayer(Player currentPlayer){
 		this.currentPlayer = currentPlayer;
 	}
 
-	public Integer getCurrentDealer(){
+	public Player getCurrentDealer(){
 		return currentDealer;
 	}
-	public void setCurrentDealer(Integer currentDealer){
+	public void setCurrentDealer(Player currentDealer){
 		this.currentDealer = currentDealer;
 	}
 
@@ -100,10 +102,10 @@ public class Game{
 		this.kanCounter = kanCounter;
 	}
 
-	public List<Integer> getPlayers(){
+	public List<Player> getPlayers(){
 		return players;
 	}
-	public void setPlayers(List<Integer> players){
+	public void setPlayers(List<Player> players){
 		this.players = players;
 	}
 
@@ -120,11 +122,11 @@ public class Game{
 	//private List<Player> players;
 	//private Ruleset ruleset;
 		//will primarily be used to score/validate hands
-	//private Tileset tileset;
+	private TileSet tileSet;
 		//tileset will need to be divided into several groups
 
-	//private List<Tile> wall;
-	//private List<Tile> deadWall; //contains the 10 potential dora/ura dora and 4 tiles that can be drawn from Kans
+	private List<Tile> wall;
+	private List<Tile> deadWall; //contains the 10 potential dora/ura dora and 4 tiles that can be drawn from Kans
 		//tiles in hands // stored in Player classes
 		//tiles in discards // stored in Player classes
 
@@ -133,7 +135,27 @@ public class Game{
 		return id;
 	}*/
 
+	public TileSet getTileSet(){
+		return this.tileSet;
+	}
 
+	public void setTileSet(TileSet tileSet){
+		this.tileSet = tileSet;
+	}
+	public List<Tile> getWall(){
+		return this.wall;
+	}
+
+	public void setWall(List<Tile> wall){
+		this.wall = wall;
+	}
+	public List<Tile> getDeadWall(){
+		return this.deadWall;
+	}
+
+	public void setDeadWall(List<Tile> deadWall){
+		this.deadWall = deadWall;
+	}
 
 
 	//non-getter/setter functions
@@ -159,13 +181,17 @@ public class Game{
 		draw(currentPlayer);
 		playerTurn(currentPlayer); //player turn functions as a game loop
 	}
+	*/
 	public void setupGame(){
-		this.wall = tileset.getTiles();
+		System.out.println(tileSet.getAllTiles().size());
+		this.wall = tileSet.getAllTiles();
+		this.deadWall = new ArrayList<Tile>();
+		System.out.println(this.wall.size());
 		Collections.shuffle(this.wall);
 		breakWall();
 		dealHands();
 	}
-
+	/*
 	public void assignWindsAndSeats(){
 		String[] windsArr = {"east", "south", "west", "north"};
 		List<String> winds = new ArrayList<String>(Arrays.asList(windsArr));
@@ -201,6 +227,7 @@ public class Game{
 					break;
 		}
 	}
+	*/
 	public void dealHands(){
 		for (Player player : players){ // deal 13 tiles to each player
 			for (int i = 0; i < 13; i++){
@@ -211,11 +238,14 @@ public class Game{
 
 	public void breakWall(){
 		for (int i = 0; i < 14; i++){ //deal 14 tiles to the dead wall
+			Tile tile = this.wall.get(this.wall.size()-1);
+			System.out.print(tile.getName() + " ");
+			System.out.println(tile.getSuite());
 			this.deadWall.add(this.wall.get(this.wall.size()-1));
 			this.wall.remove(this.wall.size()-1);
 		}
 	}
-
+	/*
 	public static boolean isValidWinningHand(Hand hand){
 		if (hand.getTiles().size() >= 14){ 
 			//the size of the list of all tiles in hand must be at least 14 or the hand cannot possibly be a winning hand
@@ -223,11 +253,12 @@ public class Game{
 		}
 		return false;
 	}
-
+	*/
 	public void draw(Player player){
-		player.drawTile(this.wall.get(this.wall.size()-1));
+		player.draw();
 		this.wall.remove(this.wall.size()-1);
 	}
+	/*
 	public void drawFromDeadWall(Player player){
 		player.drawTile(this.deadWall.get(10)); //draw the 11th tile from the dead wall (the first 10 are dora/ura dora)
 		this.deadWall.remove(this.deadWall.get(10));

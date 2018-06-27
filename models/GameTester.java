@@ -1,15 +1,22 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 public class GameTester{
 	public static void main(String[] args){
-		Integer[] p = {1,2,3,4};
-		List<Integer> players = Arrays.asList(p);
+		Player[] p = new ArrayList<Player>();
+		for (Integer i = 0; i < 4; i++){
+			String name = "test".concat(i.toString());
+			Player newPlayer = new Player(null, null, i, name, false);
+		}
+		List<Player> players = Arrays.asList(p);
 
 		String[] winds = {"East", "South", "West", "North"};
 		Game game = new Game(players, 1);
-
-		System.out.println(game.getRoundWind());
+		for (Player player : game.getPlayers()){
+			player.setGameInstance(game);
+		}
+		System.out.println("Round Wind: ".concat(game.getRoundWind().toString()));
 		System.out.println(game.getPrevWinner());
 		System.out.println(game.getWinCounter());
 		System.out.println(game.getCurrentRound());
@@ -37,26 +44,27 @@ public class GameTester{
 		}
 		else{
 			game.setWinCounter(1);
-			game.setPrevWinner(winner);
+			game.setPrevWinner(game.getPlayers().get(winner-1));
 		}
 
 		if (game.getPrevWinner() == game.getCurrentDealer()){
 			System.out.println("Hand won by dealer. Rounds remain the same.");
 		}
 		else{ //game advances
-			if (game.getCurrentDealer() == 4){ //round over
+			if (game.getCurrentDealer().equals(game.getPlayers().get(3))){ //round over
 				if (game.getCurrentRound() == game.getRounds()){
 					System.out.println("Game over");
 				}
 				else{
-					game.setCurrentDealer(1);
+					game.setCurrentDealer(game.getPlayers().get(0));
 					game.setCurrentRound(game.getCurrentRound() +1);
 					game.setRoundWind(winds[game.getCurrentRound()]);
 					System.out.println("Final hand of round won by someone other than dealer. Starting new round.");
 				}
 			}
 			else{
-				game.setCurrentDealer(game.getCurrentDealer()+1);
+				Integer dealerIdx = game.getPlayers().indexOf(game.getCurrentDealer());
+				game.setCurrentDealer(index+1);
 				System.out.println("hand won by player other than dealer. Winds rotate.");
 			}
 		}
