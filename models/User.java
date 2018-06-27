@@ -1,9 +1,9 @@
-package com.mahjong.mvc.models;
+//package com.mahjong.mvc.models;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
+/*import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,7 +16,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
-
+*/
 
 // @Entity
 // @Table(name="users")
