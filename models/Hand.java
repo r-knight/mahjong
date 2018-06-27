@@ -1,6 +1,6 @@
 import java.util.List;
-import com.sjcdojo.mahjong.Player; // Temp
-import com.sjcdojo.mahjong.Tile; // Temp
+// import com.sjcdojo.mahjong.Player; // Temp
+// import com.sjcdojo.mahjong.Tile; // Temp
 
 public class Hand {
     private List<Tile> tiles;
@@ -31,9 +31,10 @@ public class Hand {
     }
 
     // Discards a tile from Hand and returns it to the caller
-    public Tile discard() {
+    public Tile discard(Tile discardedTile) {
         // TODO: Find the candidate tile to discard.
         refreshTilesInWait();
+        return discardedTile;
     }
 
     // Checks tiles in the Hand and updates waitTiles list
