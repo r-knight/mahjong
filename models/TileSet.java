@@ -5,7 +5,7 @@ public class TileSet {
 	private ArrayList<Tile> allTiles;
 	
 	public TileSet(){
-	this.allTiles = buildDeck();	
+		this.allTiles = buildDeck();	
 	}
 	
 	private final ArrayList<Tile> buildDeck() {
