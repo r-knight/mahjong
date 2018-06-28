@@ -19,6 +19,8 @@ public class Test{
             Hand hand = new Hand();
             hand.setTiles(new ArrayList<Tile>());
             player.setHand(hand);
+            hand.setPlayer(player);
+            player.setDiscards(new ArrayList<Tile>());
 		}
         System.out.println(players);
         System.out.println("Round Wind: ".concat(game.getRoundWind().toString()));
@@ -35,7 +37,7 @@ public class Test{
 		System.out.println(game.getPlayers());
         System.out.println("Rounds: ".concat(game.getRounds().toString()));
         
-        game.setupGame();
+        game.startGame();
         System.out.print("Wall:");
         System.out.println(Arrays.deepToString(game.getWall().toArray()));
         System.out.print("Wall Size:");
