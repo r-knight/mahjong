@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
-//@Entity
-//@Table(name = "players")
+
 public class Player{
 
 //	need to import User, Game, Hand when they are compiled
@@ -16,15 +15,7 @@ public class Player{
 		private ArrayList<Tile> discards;
 		private boolean isActive; //used for the game logic to track when a player is done with their turn. the game logic should alter the state of the player before they can perform actions
 		private boolean isHuman; //tracks the players vs AIs
-		
-//		one to one relationship with the user
-		
-//		@OneToOne(mappedBy="player", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 		private User user;
-		
-		
-//		one to one relationship with the hand
-//		@OneToOne(mappedBy="player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 		private Hand hand;
 		
 		
