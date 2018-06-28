@@ -32,9 +32,42 @@ public class Hand {
 
     // Discards a tile from Hand and returns it to the caller
     public Tile discard(Tile discardedTile) {
-        // TODO: Find the candidate tile to discard.
+        
+ 
+    	for(int i = 0; i < tiles.size(); i++ ) {
+    		if(discardedTile == tiles.get(i)) {
+    			System.out.println("Discard index: " + i);
+        		System.out.println(player.getHand().getTiles());
+        		System.out.println(player.getHand().getTiles().size());
+        		System.out.println("Discard tile: " + tiles.get(i));
+        		System.out.println("Discard suite: " + tiles.get(i).getSuite());
+        		System.out.println("Discard name: " + tiles.get(i).getName());
+    			Tile discardTile = tiles.get(i);
+    			player.getDiscards().add(discardTile);
+    			this.tiles.remove(discardTile);
+    			System.out.println(player.getHand().getTiles());
+    			System.out.println(player.getHand().getTiles().size());
+    		}
+    	}
         refreshTilesInWait();
         return discardedTile;
+    }
+    
+//  Discard a tile from hand by index location, returns it to the caller
+    public Tile discardByIndex(Integer index) {
+    		System.out.println("Discard index: " + index);
+    		System.out.println(player.getHand().getTiles());
+    		System.out.println(player.getHand().getTiles().size());
+    		System.out.println("Discard tile: " + tiles.get(index));
+    		System.out.println("Discard suite: " + tiles.get(index).getSuite());
+    		System.out.println("Discard name: " + tiles.get(index).getName());
+	    	Tile discardTile = tiles.get(index);
+			player.getDiscards().add(tiles.get(index));
+			this.tiles.remove(tiles.get(index));
+			System.out.println(player.getHand().getTiles());
+			System.out.println(player.getHand().getTiles().size());
+			
+    	return discardTile;
     }
 
     // Checks tiles in the Hand and updates waitTiles list
@@ -64,7 +97,7 @@ public class Hand {
     }
 
     // getters and setters
-    public List<Tile> getTitles() {
+    public List<Tile> getTiles() {
         return tiles;
     }
 
