@@ -1,4 +1,4 @@
-
+//package com.mahjong.mvc.models;
 
 public class Wind extends Tile{
 //	east, west, north, south

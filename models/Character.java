@@ -1,4 +1,4 @@
-
+//package com.mahjong.mvc.models;
 
 public class Character extends Tile {
 //	symbol, essentially a number in the set. 

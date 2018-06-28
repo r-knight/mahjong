@@ -1,3 +1,4 @@
+//package com.mahjong.mvc.models;
 import java.util.List;
 
 public class Meld {

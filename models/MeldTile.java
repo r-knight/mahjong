@@ -1,3 +1,4 @@
+//package com.mahjong.mvc.models;
 //import com.sjcdojo.mahjong.Player; // Temp
 //import com.sjcdojo.mahjong.Tile; // Temp
 

@@ -1,3 +1,4 @@
+//package com.mahjong.mvc.models;
 
 public class Bamboo extends Tile{
 //	the number of bamboos

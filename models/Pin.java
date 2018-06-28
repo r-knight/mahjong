@@ -1,4 +1,4 @@
-
+//package com.mahjong.mvc.models;
 
 public class Pin extends Tile {
 	

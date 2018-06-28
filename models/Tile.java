@@ -1,4 +1,4 @@
-
+//package com.mahjong.mvc.models;
 
 
 abstract public class Tile {
