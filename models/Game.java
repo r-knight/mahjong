@@ -2,6 +2,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 public class Game{
 
@@ -304,12 +306,13 @@ public class Game{
 	public Tile playerTileDiscardPhase(Player player){
 		Tile discardedTile;
 		boolean isHuman = false; // TODO: change to check if player.isHuman() later
+		int randomNum  = ThreadLocalRandom.current().nextInt(0, player.getHand().getTiles().size());
 		if (isHuman){
 			//TODO: check for player to discard, set variable "discardedTile" to be that discard
-			discardedTile = player.getHand().discard((player.getHand().getTiles().get((player.getHand().getTiles().size() -1))));
+			discardedTile = player.getHand().discard((player.getHand().getTiles().get(randomNum)));
 		}
 		else{
-			discardedTile = player.getHand().discard((player.getHand().getTiles().get((player.getHand().getTiles().size() -1))));
+			discardedTile = player.getHand().discard((player.getHand().getTiles().get(randomNum)));
 		}
 		this.currentTurn +=1;
 		return discardedTile;
