@@ -43,7 +43,7 @@ public class Test{
         System.out.println(Arrays.deepToString(game.getWall().toArray()));
         System.out.print("Wall Size:");
         System.out.println(game.getWall().size());
-        System.out.println("-=-=-Test discard-=-=-");
-        System.out.println(game.getCurrentPlayer().getHand().discardByIndex(1));
+       // System.out.println("-=-=-Test discard-=-=-");
+       // System.out.println(game.getCurrentPlayer().getHand().discardByIndex(1));
     }
 }

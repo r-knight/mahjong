@@ -373,13 +373,29 @@ public class Game{
 		*/
 		System.out.println("=-=-=-=-=-=-=-CURRENT TURN: " + this.currentTurn + "-=-=-=-=-=-=-=");
 		System.out.println("=-=-=-=-=-=-=-DISCARDING-=-=-=-=-=-=-=");
+		
 		Tile tile = playerTileDiscardPhase(this.currentPlayer);
-		System.out.println(tile.getSuite() + " " + tile.getName());
+		System.out.println(tile.getSuite() + " " + tile.getName());try        
+		{
+			Thread.sleep(1000);
+		} 
+		catch(InterruptedException ex) 
+		{
+			Thread.currentThread().interrupt();
+		}
 		if(this.wall.size() > 0){
 			setNextPlayer();
 			System.out.println("=-=-=-=-=-=-=-STARTING TURN FOR PLAYER: " + this.getCurrentPlayer() + "-=-=-=-=-=-=-=");
 			draw(this.currentPlayer);
 			System.out.println("=-=-=-=-=-=-=-TILE DRAWN-=-=-=-=-=-=-=");
+			try        
+			{
+				Thread.sleep(1000);
+			} 
+			catch(InterruptedException ex) 
+			{
+				Thread.currentThread().interrupt();
+			}
 			playerTurn(this.currentPlayer);
 		}
 		else{
