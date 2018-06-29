@@ -346,6 +346,14 @@ public class Game{
 				System.out.println("Thread was interrupted");
 			}
 		}
+		try        
+		{
+			Thread.sleep(100);
+		} 
+		catch(InterruptedException ex) 
+		{
+			Thread.currentThread().interrupt();
+		}
 	}
 	public Tile humanPlayerSelectDiscard(Player player, int randomNum){
 		Tile discardedTile = null;
