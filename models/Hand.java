@@ -1,5 +1,6 @@
 //package com.mahjong.mvc.models;
 import java.util.List;
+import java.util.ArrayList;
 // import com.sjcdojo.mahjong.Player; // Temp
 // import com.sjcdojo.mahjong.Tile; // Temp
 
@@ -128,5 +129,19 @@ public class Hand {
 
     public void setWaitTiles(List<Tile> waitTiles) {
         this.waitTiles = waitTiles;
+    }
+
+    
+    public void sortHand() {
+        ArrayList<Tile> newHand = new ArrayList<Tile>();
+        String[] comparator = {"wind", "dragon", "pin", "bamboo", "character"};
+        for(int i = 0; i < 5; i++) {
+            for(Tile tile : this.tiles) {
+                if(tile.getSuite().contentEquals(comparator[i])) {
+                    newHand.add(tile);
+                }
+            }
+        }
+        this.setTiles(newHand);
     }
 }

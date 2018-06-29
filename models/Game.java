@@ -246,6 +246,7 @@ public class Game{
 			for (int i = 0; i < 13; i++){
 				draw(player);
 			}
+			player.getHand().sortHand();
 		}
 	}
 
@@ -378,7 +379,9 @@ public class Game{
 		System.out.println("=-=-=-=-=-=-=-DISCARDING-=-=-=-=-=-=-=");
 		
 		Tile tile = playerTileDiscardPhase(this.currentPlayer);
-		System.out.println(tile.getSuite() + " " + tile.getName());try        
+		this.currentPlayer.getHand().sortHand();
+		System.out.println(tile.getSuite() + " " + tile.getName());
+		try        
 		{
 			Thread.sleep(1000);
 		} 
