@@ -193,7 +193,9 @@ public class Game{
 		Collections.shuffle(this.players);
 		assignWindsAndSeats();
 		setupGame();
+		System.out.println("=-=-=-=-=-=-=-STARTING FIRST TURN - PLAYER: " + this.getCurrentPlayer() + "-=-=-=-=-=-=-=");
 		draw(currentPlayer);
+		System.out.println("=-=-=-=-=-=-=-TILE DRAWN-=-=-=-=-=-=-=");
 		playerTurn(currentPlayer); //player turn functions as a game loop
 	}
 	public void setupGame(){
