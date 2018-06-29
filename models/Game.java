@@ -1,5 +1,4 @@
 //package com.mahjong.mvc.models;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -284,7 +283,7 @@ public class Game{
 		//TODO: check for player to declare Tsumo or a concealed Kan
 		//TODO: create "actionsAvailable" variable to check if player can declare kan or tsumo
 		boolean actionsAvailable = false;
-		//while(actionsAvailable){ 
+		while(actionsAvailable){ 
 			//do stuff
 			boolean playerDeclaresTsumo = false;
 			boolean playerDeclaresKan = false;
@@ -305,6 +304,7 @@ public class Game{
 			else{
 				actionsAvailable = false;
 			}
+		}
 	}
 	public Tile playerTileDiscardPhase(Player player){
 		Tile discardedTile;
