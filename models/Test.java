@@ -17,7 +17,7 @@ public class Test{
             Player newPlayer = new Player(null, null, i, name, false);
             players.add(newPlayer);
         }
-        
+        players.get(0).setHuman(true);
 		Game game = new Game(players, 1);
 		for (Player player : game.getPlayers()){
             player.setGameInstance(game);
@@ -48,6 +48,7 @@ public class Test{
         
 
         gameLogger.flush(); // flush printstream before starting a game so all setup info is logged properly
+        //gameLogger.resetOutstreamToSTDOut();
         game.startGame();
         gameLogger.flush(); // flush printstream after game ends so all game data is logged properly
 

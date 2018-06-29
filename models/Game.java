@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
+import java.util.Scanner;
+
+
 public class Game{
 
 	private String roundWind;
@@ -32,6 +35,8 @@ public class Game{
 		//list of players. When the Player class is finished, we can change this to be of type List<Player>
 	private Integer rounds;
 		//rounds to play
+
+	private volatile boolean waitingForDiscard;
 	public Game(){
 
 	}
@@ -49,6 +54,7 @@ public class Game{
 		this.players = players;
 		this.currentPlayer = players.get(0);
 		this.currentDealer = players.get(0);
+		this.waitingForDiscard = false;
 	}
 
 	public String getRoundWind(){
@@ -124,6 +130,13 @@ public class Game{
 	}
 	public void setRounds(Integer rounds){
 		this.rounds = rounds;
+	}
+
+	public boolean getWaitingForDiscard(){
+		return waitingForDiscard;
+	}
+	public boolean setWaitingForDiscard(boolean waitingForDiscard){
+		return this.waitingForDiscard = waitingForDiscard;
 	}
 	//TODO implement the following variables after the relevant classes have been created
 	//private Long id;
@@ -308,19 +321,62 @@ public class Game{
 	}
 	public Tile playerTileDiscardPhase(Player player){
 		Tile discardedTile;
-		boolean isHuman = false; // TODO: change to check if player.isHuman() later
+		boolean isHuman = player.isHuman(); // TODO: change to check if player.isHuman() later
 		int randomNum  = ThreadLocalRandom.current().nextInt(0, player.getHand().getTiles().size());
 		if (isHuman){
 			//TODO: check for player to discard, set variable "discardedTile" to be that discard
-			discardedTile = player.getHand().discard((player.getHand().getTiles().get(randomNum)));
+			waitForPlayerDiscard();
+			//discardedTile = humanPlayerSelectDiscard(player, randomNum);
+			discardedTile = player.getDiscards().get(player.getDiscards().size()-1);
 		}
 		else{
 			discardedTile = player.getHand().discard((player.getHand().getTiles().get(randomNum)));
+			this.waitingForDiscard = false;
 		}
 		this.currentTurn +=1;
 		return discardedTile;
 	}
+	public void waitForPlayerDiscard(){
+		while (waitingForDiscard){
+			try{
+				Thread.sleep(1000);
+				System.out.println("Waiting...");
+			}
+			catch(Exception e){
+				System.out.println("Thread was interrupted");
+			}
+		}
+	}
+	public Tile humanPlayerSelectDiscard(Player player, int randomNum){
+		Tile discardedTile = null;
+		int maxHandIndex = player.getHand().getTiles().size()-1;
+		Scanner reader = new Scanner(System.in);  // Reading from System.in
+		Integer n;
+		
+		do{
+			System.out.println("Enter a number between 0 and " + maxHandIndex + ":");
+			while(!reader.hasNextInt()){
+				System.out.println("invalid input!"); // Scans the next token of the input as an int.
+				reader.next();
+			}
+			n = reader.nextInt();
+		} while ((n < 0 ||  n > maxHandIndex) || n == null);
 
+		//once finished
+		//reader.close();
+
+		if (n != null){
+			if (n >= 0 && n <= maxHandIndex){
+				discardedTile = player.getHand().discard((player.getHand().getTiles().get(n)));
+				this.waitingForDiscard = false;
+			}
+		}
+		if (discardedTile == null){
+			discardedTile = player.getHand().discard((player.getHand().getTiles().get(randomNum)));
+			this.waitingForDiscard = false;
+		}
+		return discardedTile;
+	}
 	public boolean discardClaimPhase(Player player, Tile discardedTile){
 		List<Player> claims = checkPlayerWaits(discardedTile);
 		boolean tileClaimed = false;
@@ -379,7 +435,7 @@ public class Game{
 		*/
 		System.out.println("=-=-=-=-=-=-=-CURRENT TURN: " + this.currentTurn + "-=-=-=-=-=-=-=");
 		System.out.println("=-=-=-=-=-=-=-DISCARDING-=-=-=-=-=-=-=");
-		
+		this.waitingForDiscard = true;
 		Tile tile = playerTileDiscardPhase(this.currentPlayer);
 		this.currentPlayer.getHand().sortHand();
 		System.out.println(tile.getSuite() + " " + tile.getName());
@@ -465,6 +521,7 @@ public class Game{
 		this.kanCounter = 0; 
 		this.currentHand +=1;
 		this.currentTurn =1;
+		this.waitingForDiscard = false;
 	}
 	public void progressToNextRound(){
 		this.currentRound +=1;
