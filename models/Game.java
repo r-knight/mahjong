@@ -1,4 +1,5 @@
-//package com.mahjong.mvc.models;
+ //package com.mahjong.mvc.models;
+ 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -337,10 +338,11 @@ public class Game{
 		return discardedTile;
 	}
 	public void waitForPlayerDiscard(){
-		while (waitingForDiscard){
+		while (waitingForDiscard){ // waits for player input on site, API call will toggle this attribute so the game can progress
 			try{
 				Thread.sleep(1000);
 				System.out.println("Waiting...");
+				System.out.println("Number of tiles in hand:" + this.currentPlayer.getHand().getTiles().size());
 			}
 			catch(Exception e){
 				System.out.println("Thread was interrupted");
